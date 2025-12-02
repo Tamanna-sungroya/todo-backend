@@ -12,7 +12,7 @@ app.use(express.json())
 
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log("DB connected"))
-.catch((err)=>console.log(err))
+.catch(()=>console.log(err))
 
 const Todo = mongoose.model('Todo', new mongoose.Schema({
     text: String
@@ -22,6 +22,16 @@ app.get("/todos", async (req, res) => {
     res.json( await Todo.find());
 })
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server started on port ${process.env.PORT || 5000}`);
+app.post('/todos', async (req, res) => {
+  const todo = await Todo.create({text : req.body.text});
+  res.json(todo);
+})
+
+app.delete('/todo/:id', async (req, res) => {
+  await Todo.findByIdAndDelete(req.params.id);
+  res.json({message: 'Deleted'});
+})
+
+app.listen(process.env.PORT, () => {
+  console.log("Server started on port",process.env.PORT);
 });
