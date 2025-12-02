@@ -12,7 +12,7 @@ app.use(express.json())
 
 mongoose.connect(process.env.MONGO_URL)
 .then(()=>console.log("DB connected"))
-.catch(()=>console.log(err))
+.catch((err)=>console.log(err))
 
 const Todo = mongoose.model('Todo', new mongoose.Schema({
     text: String
